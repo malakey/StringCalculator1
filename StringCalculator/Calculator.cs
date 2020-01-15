@@ -17,12 +17,14 @@ namespace StringCalculator
 
         public void StartCalculator()
         {
-            var input = Console.ReadLine();
+            while (true)
+            {
+                var input = Console.ReadLine();
 
-            var result = ParseStringAndCalculate(input);
+                var result = ParseStringAndCalculate(input);
 
-            Console.WriteLine(result);
-            
+                Console.WriteLine(result);
+            }
         }
 
         public int ParseStringAndCalculate(string input)
@@ -32,7 +34,7 @@ namespace StringCalculator
                 return 0;
             }
 
-            var splitInput = input.Split(',');
+            var splitInput = input.Split(new string[] { ",", "\\n" }, StringSplitOptions.None);
 
             int result = 0;
             StringBuilder formula = new StringBuilder();

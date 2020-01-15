@@ -60,5 +60,16 @@ namespace StringCalculatorTest
 
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void ParseStringAndCalculate_3NumbersWithNewLineDelimiter_Added()
+        {
+            var testString = @"1\n2,3";
+            var expectedResult = 6;
+
+            var result = calculator.ParseStringAndCalculate(testString);
+
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
