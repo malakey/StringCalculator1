@@ -65,6 +65,8 @@ namespace StringCalculator
                     {
                         negatives.Add(res);
                     }
+
+                    res = (res <= 1000) ? res : 0;
                     result += res;
                     formula.Append(res);
                 }

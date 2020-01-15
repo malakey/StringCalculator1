@@ -82,5 +82,16 @@ namespace StringCalculatorTest
             Assert.True(exception.Data.Contains("NegativesEntered"));
             Assert.Equal("-11,-22", exception.Data["NegativesEntered"]);
         }
+
+        [Fact]
+        public void ParseStringAndCalculate_3Numbers_Over1000Invalid()
+        {
+            var testString = @"1234,11,99999";
+            var expectedResult = 11;
+
+            var result = calculator.ParseStringAndCalculate(testString);
+
+            Assert.Equal(expectedResult, result);
+        }
     }
 }
