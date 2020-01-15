@@ -51,11 +51,14 @@ namespace StringCalculatorTest
         }
 
         [Fact]
-        public void ParseStringAndCalculate_3Numbers_ThrowsException()
+        public void ParseStringAndCalculate_6Numbers_Added()
         {
-            var testString = "1,2,3";
+            var testString = "1,2,3,4,5,6";
+            var expectedResult = 21;
 
-            Assert.Throws<InvalidOperationException>(() => calculator.ParseStringAndCalculate(testString));
+            var result = calculator.ParseStringAndCalculate(testString);
+
+            Assert.Equal(expectedResult, result);
         }
     }
 }

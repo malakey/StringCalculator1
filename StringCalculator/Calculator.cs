@@ -34,12 +34,6 @@ namespace StringCalculator
 
             var splitInput = input.Split(',');
 
-            if (splitInput.Length > 2)
-            {
-                _logger.LogError("Cannot have more than 2 numbers - throwing exception");
-                  throw new ArgumentException();
-            }
-
             int result = 0;
             StringBuilder formula = new StringBuilder();
 
@@ -53,7 +47,7 @@ namespace StringCalculator
                 if (int.TryParse(split, out int res))
                 {
                     result += res;
-                    formula.Append(result);
+                    formula.Append(res);
                 }
                 else
                 {
