@@ -21,9 +21,21 @@ namespace StringCalculator
             {
                 var input = Console.ReadLine();
 
-                var result = ParseStringAndCalculate(input);
-
-                Console.WriteLine(result);
+                try
+                {
+                    var result = ParseStringAndCalculate(input);
+                    Console.WriteLine(result);
+                }
+                catch(Exception ex)
+                {
+                    if (ex.Data.Contains("NegativesEntered")) {
+                        _logger.LogError($"Negatives aren't allowed. Negatives entered: {ex.Data["NegativesEntered"].ToString()}");
+                    }
+                    else
+                    {
+                        _logger.LogError(ex.Message.ToString());
+                    }
+                }
             }
         }
 
@@ -38,6 +50,7 @@ namespace StringCalculator
 
             int result = 0;
             StringBuilder formula = new StringBuilder();
+            List<int> negatives = new List<int>();
 
             foreach (var split in splitInput)
             {
@@ -48,6 +61,10 @@ namespace StringCalculator
 
                 if (int.TryParse(split, out int res))
                 {
+                    if (res < 0)
+                    {
+                        negatives.Add(res);
+                    }
                     result += res;
                     formula.Append(res);
                 }
@@ -55,6 +72,13 @@ namespace StringCalculator
                 {
                     formula.Append("0");
                 }
+            }
+
+            if (negatives.Count > 0)
+            {
+                Exception ex = new Exception();
+                ex.Data.Add("NegativesEntered", String.Join(",", negatives));
+                throw ex;
             }
 
             formula.Append($" = {result}");

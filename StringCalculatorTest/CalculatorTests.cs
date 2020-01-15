@@ -71,5 +71,16 @@ namespace StringCalculatorTest
 
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public void ParseStringAndCalculate_3NumbersWith2Negatives_ThrowsException()
+        {
+            var testString = @"11,-11,-22";
+
+            var exception = Assert.Throws<Exception>(() => calculator.ParseStringAndCalculate(testString));
+
+            Assert.True(exception.Data.Contains("NegativesEntered"));
+            Assert.Equal("-11,-22", exception.Data["NegativesEntered"]);
+        }
     }
 }
