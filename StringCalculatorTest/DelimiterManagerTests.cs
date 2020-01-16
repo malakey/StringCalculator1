@@ -57,5 +57,18 @@ namespace StringCalculatorTest
             Assert.Equal(expectedNewInput, newInput);
             Assert.Equal(expectedDelimiters.ToArray(), delimiters);
         }
+
+        [Fact]
+        public void GetDelimitersFromInput_WithMultiCustom_ReturnsDefaultAndCustom()
+        {
+            var input = @"//[asdf][zxcv][qwer]\n123,345,567asdf678";
+            expectedDelimiters.AddRange(new string[] { "asdf", "zxcv", "qwer" });
+            var expectedNewInput = "123,345,567asdf678";
+
+            (var newInput, var delimiters) = _delimiterManager.GetDelimitersFromInput(input);
+
+            Assert.Equal(expectedNewInput, newInput);
+            Assert.Equal(expectedDelimiters.ToArray(), delimiters);
+        }
     }
 }

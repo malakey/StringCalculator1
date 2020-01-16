@@ -10,8 +10,8 @@ namespace StringCalculator
     {
         private readonly ILogger<DelimiterManager> _logger;
         private readonly Regex singleCharRegex = new Regex(@"\/\/.\\n");
-        private readonly Regex multiCharRegex = new Regex(@"\/\/\[.*\]\\n");
-        
+        private readonly Regex multiCharRegex = new Regex(@"\/\/(\[.*\])*\\n");
+        private readonly Regex multiDelimiterRegex = new Regex(@"\[(.*?)\]");
 
         public DelimiterManager(ILogger<DelimiterManager> logger)
         {
@@ -34,7 +34,14 @@ namespace StringCalculator
                 else if (multiCharRegex.IsMatch(input))
                 {
                     var match = multiCharRegex.Match(input);
-                    delimiters.Add(match.Value.Substring(3, match.Value.Length - 6));
+
+                    var multiDelimiterMatch = multiDelimiterRegex.Matches(match.Value);
+
+                    foreach(Match delimiter in multiDelimiterMatch)
+                    {
+                        delimiters.Add(delimiter.Value.Substring(1, delimiter.Value.Length - 2));
+                    }
+
                     input = input.Substring(match.Value.Length, input.Length - match.Value.Length);
                 }
                 else
