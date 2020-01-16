@@ -9,7 +9,9 @@ namespace StringCalculator
     public class DelimiterManager : IDelimiterManager
     {
         private readonly ILogger<DelimiterManager> _logger;
-        private readonly Regex singleItemRegex = new Regex(@"\/\/.\\n");
+        private readonly Regex singleCharRegex = new Regex(@"\/\/.\\n");
+        private readonly Regex multiCharRegex = new Regex(@"\/\/\[.*\]\\n");
+        
 
         public DelimiterManager(ILogger<DelimiterManager> logger)
         {
@@ -21,15 +23,24 @@ namespace StringCalculator
             var delimiters = new List<string>();
             delimiters.AddRange(new string[] { ",", @"\n" });
 
-            if (input.Substring(0, 2).Equals("//") && singleItemRegex.IsMatch(input))
+            if (input.Substring(0, 2).Equals("//"))
             {
-                var match = singleItemRegex.Match(input);
-                delimiters.Add(match.Value.Substring(2, 1));
-                input = input.Substring(match.Value.Length, input.Length - match.Value.Length);
-            }
-            else
-            {
-                _logger.LogInformation($"No custom delimiters found in input - {input}");
+                if (singleCharRegex.IsMatch(input))
+                {
+                    var match = singleCharRegex.Match(input);
+                    delimiters.Add(match.Value.Substring(2, 1));
+                    input = input.Substring(match.Value.Length, input.Length - match.Value.Length);
+                }
+                else if (multiCharRegex.IsMatch(input))
+                {
+                    var match = multiCharRegex.Match(input);
+                    delimiters.Add(match.Value.Substring(3, match.Value.Length - 6));
+                    input = input.Substring(match.Value.Length, input.Length - match.Value.Length);
+                }
+                else
+                {
+                    _logger.LogInformation($"No custom delimiters found in input - {input}");
+                }
             }
 
             return (input, delimiters.ToArray());
