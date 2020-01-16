@@ -2,7 +2,7 @@
   "profiles": {
     "StringCalculator": {
       "commandName": "Project",
-      "commandLineArgs": "--operation * --upperBound 1500 --allowNegatives --delimiter p"
+      "commandLineArgs": "--operation + --upperBound 1000 --allowNegatives --alternateDelimiter \\n"
     }
   }
 }

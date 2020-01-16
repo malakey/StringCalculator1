@@ -11,16 +11,14 @@ namespace StringCalculator
     public class Calculator : ICalculator
     {
         private readonly ILogger<Calculator> _logger;
-        private readonly IDelimiterManager _delimiterManager;
         private readonly IStringParserManager _stringParserManager;
         private readonly ICalculationManager _calculationManager;
 
-        public Calculator(ILogger<Calculator> logger, IStringParserManager stringParserManager, ICalculationManager calculationManager, IDelimiterManager delimiterManager)
+        public Calculator(ILogger<Calculator> logger, IStringParserManager stringParserManager, ICalculationManager calculationManager)
         {
             _logger = logger;
             _stringParserManager = stringParserManager;
             _calculationManager = calculationManager;
-            _delimiterManager = delimiterManager;
         }
 
         public void StartCalculator(string operationType, string alternateDelimiter, bool allowNegatives, int upperBound)
