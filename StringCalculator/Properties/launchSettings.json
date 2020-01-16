@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "StringCalculator": {
+      "commandName": "Project",
+      "commandLineArgs": "--operation * --upperBound 1500 --allowNegatives --delimiter p"
+    }
+  }
+}

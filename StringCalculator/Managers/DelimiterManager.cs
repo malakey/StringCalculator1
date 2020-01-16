@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace StringCalculator
+namespace StringCalculator.Managers
 {
     public class DelimiterManager : IDelimiterManager
     {
@@ -18,10 +18,10 @@ namespace StringCalculator
             _logger = logger;
         }
 
-        public (string input, string[] delimiters) GetDelimitersFromInput(string input)
+        public (string input, string[] delimiters) GetDelimitersFromInput(string input, string alternateDelimiter)
         {
             var delimiters = new List<string>();
-            delimiters.AddRange(new string[] { ",", @"\n" });
+            delimiters.AddRange(new string[] { ",", alternateDelimiter });
 
             if (input.Substring(0, 2).Equals("//"))
             {

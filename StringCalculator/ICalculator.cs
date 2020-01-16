@@ -6,8 +6,6 @@ namespace StringCalculator
 {
     public interface ICalculator
     {
-        void StartCalculator();
-
-        int ParseStringAndCalculate(string input);
+        void StartCalculator(string operationType, string optionalDelimiter, bool allowNegatives, int upperBound);
     }
 }

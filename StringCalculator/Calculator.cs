@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using StringCalculator.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,18 @@ namespace StringCalculator
     {
         private readonly ILogger<Calculator> _logger;
         private readonly IDelimiterManager _delimiterManager;
+        private readonly IStringParserManager _stringParserManager;
+        private readonly ICalculationManager _calculationManager;
 
-        public Calculator(ILogger<Calculator> logger, IDelimiterManager delimiterManager)
+        public Calculator(ILogger<Calculator> logger, IStringParserManager stringParserManager, ICalculationManager calculationManager, IDelimiterManager delimiterManager)
         {
             _logger = logger;
+            _stringParserManager = stringParserManager;
+            _calculationManager = calculationManager;
             _delimiterManager = delimiterManager;
         }
 
-        public void StartCalculator()
+        public void StartCalculator(string operationType, string alternateDelimiter, bool allowNegatives, int upperBound)
         {
             while (true)
             {
@@ -26,8 +31,11 @@ namespace StringCalculator
 
                 try
                 {
-                    var result = ParseStringAndCalculate(input);
+                    var numbers = _stringParserManager.ParseInputString(input, alternateDelimiter, allowNegatives, upperBound);
+                    var result = _calculationManager.PerformCalculation(numbers, operationType);
+                    Console.WriteLine(String.Concat(String.Join(operationType, numbers), " = ", result));
                     Console.WriteLine(result);
+
                 }
                 catch(Exception ex)
                 {
@@ -40,59 +48,6 @@ namespace StringCalculator
                     }
                 }
             }
-        }
-
-        public int ParseStringAndCalculate(string input)
-        {
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                return 0;
-            }
-
-            (var newInput, var delimiters) = _delimiterManager.GetDelimitersFromInput(input);
-
-            var splitInput = newInput.Split(delimiters.ToArray(), StringSplitOptions.None);
-
-            int result = 0;
-            StringBuilder formula = new StringBuilder();
-            List<int> negatives = new List<int>();
-
-            foreach (var split in splitInput)
-            {
-                if (formula.Length != 0)
-                {
-                    formula.Append("+");
-                }
-
-                if (int.TryParse(split, out int res))
-                {
-                    if (res < 0)
-                    {
-                        negatives.Add(res);
-                    }
-
-                    res = (res <= 1000) ? res : 0;
-                    result += res;
-                    formula.Append(res);
-                }
-                else
-                {
-                    formula.Append("0");
-                }
-            }
-
-            if (negatives.Count > 0)
-            {
-                Exception ex = new Exception();
-                ex.Data.Add("NegativesEntered", String.Join(",", negatives));
-                throw ex;
-            }
-
-            formula.Append($" = {result}");
-
-            Console.WriteLine(formula.ToString());
-
-            return result;
         }
     }
 }
