@@ -3,16 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace StringCalculator
 {
     public class Calculator : ICalculator
     {
         private readonly ILogger<Calculator> _logger;
+        private readonly IDelimiterManager _delimiterManager;
 
-        public Calculator(ILogger<Calculator> logger)
+        public Calculator(ILogger<Calculator> logger, IDelimiterManager delimiterManager)
         {
             _logger = logger;
+            _delimiterManager = delimiterManager;
         }
 
         public void StartCalculator()
@@ -46,7 +49,9 @@ namespace StringCalculator
                 return 0;
             }
 
-            var splitInput = input.Split(new string[] { ",", "\\n" }, StringSplitOptions.None);
+            (var newInput, var delimiters) = _delimiterManager.GetDelimitersFromInput(input);
+
+            var splitInput = newInput.Split(delimiters.ToArray(), StringSplitOptions.None);
 
             int result = 0;
             StringBuilder formula = new StringBuilder();

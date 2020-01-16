@@ -15,6 +15,7 @@ namespace StringCalculator
                     builder.AddDebug();
                 })
                 .AddSingleton<ICalculator, Calculator>()
+                .AddSingleton<IDelimiterManager, DelimiterManager>()
                 .BuildServiceProvider();
 
             var calculator = serviceProvider.GetService<ICalculator>();
